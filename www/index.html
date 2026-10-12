@@ -242,6 +242,126 @@
             50% { transform: scale(0.7); opacity: 0.5; }
         }
 
+        /* ── WATER THE PLANTS STATION ── */
+        .water-station {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        .water-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 28px;
+            background: linear-gradient(180deg, #ffffff 0%, #fff0f5 100%);
+            border: 2.5px solid #db2777;
+            border-radius: 999px;
+            color: #9d174d;
+            font-family: 'Fredoka', cursive, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(219, 39, 119, 0.22), 0 2px 6px rgba(0,0,0,0.08);
+            transition: all 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
+            user-select: none;
+            position: relative;
+        }
+        .water-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            background: #fff5f8;
+            border-color: #be185d;
+            color: #831843;
+            box-shadow: 0 12px 26px rgba(219, 39, 119, 0.32);
+        }
+        .water-btn:active {
+            transform: translateY(1px) scale(0.97);
+        }
+        .watering-can-icon {
+            flex-shrink: 0;
+            transition: transform 0.35s ease;
+        }
+        .water-btn.is-watering .watering-can-icon {
+            transform: rotate(-25deg) scale(1.1);
+        }
+
+        .water-counter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #38bdf8;
+            border-radius: 999px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0369a1;
+            box-shadow: 0 6px 16px rgba(3, 105, 161, 0.16);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Celebrating pulse animation on garden plots when watered */
+        @keyframes plant-bloom-pulse {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.03) translateY(-4px); }
+            70%  { transform: scale(0.99); }
+            100% { transform: scale(1); }
+        }
+        .fenced-plot.watered-bloom {
+            animation: plant-bloom-pulse 0.75s ease-out;
+        }
+
+        /* Animated Water Splash Droplets */
+        .water-drop-spray {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            will-change: transform, opacity;
+            animation: drop-fly 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes drop-fly {
+            0% {
+                transform: translate(0, 0) scale(0.4);
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        /* Toast notification when watered */
+        .water-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: #ffffff;
+            border: 2.5px solid #38bdf8;
+            border-radius: 999px;
+            padding: 10px 26px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0369a1;
+            box-shadow: 0 14px 32px rgba(3, 105, 161, 0.25);
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+        }
+        .water-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         /* ── GARDEN PLOTS GRID ── */
         .plots-grid {
             display: grid;
@@ -588,6 +708,27 @@
         <div class="garden-badge">
             <span class="pulsing-leaf"></span>
             Growing & Blooming Daily
+        </div>
+        <br>
+        <div class="water-station">
+            <button id="waterPlantsBtn" class="water-btn" type="button" aria-label="Water the plants">
+                <svg class="watering-can-icon" width="26" height="26" viewBox="0 0 28 28" fill="none">
+                    <path d="M7 10 L19 10 C19.5 10 20 10.5 19.8 11.5 L18 20 C17.8 21 17 21.5 16 21.5 L10 21.5 C9 21.5 8.2 21 8 20 L6.2 11.5 C6 10.5 6.5 10 7 10 Z" fill="#f472b6" stroke="#be185d" stroke-width="1.6"/>
+                    <path d="M8 11 C4 11 3 17 6.5 19" stroke="#be185d" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <path d="M18.5 14 L24 9" stroke="#be185d" stroke-width="2.2" stroke-linecap="round"/>
+                    <ellipse cx="24.5" cy="8.5" rx="2.5" ry="4" fill="#fbbf24" stroke="#d97706" stroke-width="1.2" transform="rotate(-30 24.5 8.5)"/>
+                    <circle cx="27" cy="11" r="1" fill="#60a5fa"/>
+                    <circle cx="25.5" cy="14" r="1.2" fill="#38bdf8"/>
+                </svg>
+                <span>Water the Plants</span>
+            </button>
+            <div class="water-counter-badge" id="waterCounterBadge">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M9 2 C9 2 4 8.5 4 12 C4 15 6.2 16.5 9 16.5 C11.8 16.5 14 15 14 12 C14 8.5 9 2 9 2 Z" fill="#38bdf8"/>
+                    <circle cx="7.5" cy="11.5" r="1.5" fill="#ffffff" opacity="0.8"/>
+                </svg>
+                <span id="waterCountText">Watered 3 times today</span>
+            </div>
         </div>
     </header>
 
@@ -1155,6 +1296,76 @@
         setTimeout(createDriftingPetal, i * 1500);
     }
     setInterval(createDriftingPetal, 3200);
+
+    // Interactive "Water the Plants" Experience
+    let waterCount = parseInt(localStorage.getItem('watered-count') || '3', 10);
+    const waterBtn = document.getElementById('waterPlantsBtn');
+    const waterCountText = document.getElementById('waterCountText');
+    const toast = document.createElement('div');
+    toast.className = 'water-toast';
+    toast.innerHTML = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="vertical-align:middle;margin-right:8px;display:inline-block"><path d="M9 2 C9 2 4 8.5 4 12 C4 15 6.2 16.5 9 16.5 C11.8 16.5 14 15 14 12 C14 8.5 9 2 9 2 Z" fill="#38bdf8"/><circle cx="7.5" cy="11.5" r="1.5" fill="#ffffff" opacity="0.8"/></svg> The garden is refreshed & blooming happily!`;
+    document.body.appendChild(toast);
+
+    function updateWaterDisplay() {
+        waterCountText.textContent = `Watered ${waterCount} ${waterCount === 1 ? 'time' : 'times'} today`;
+    }
+    updateWaterDisplay();
+
+    let toastTimer;
+    waterBtn.addEventListener('click', () => {
+        waterCount++;
+        localStorage.setItem('watered-count', waterCount);
+        updateWaterDisplay();
+
+        // Watering can tilt animation
+        waterBtn.classList.add('is-watering');
+        setTimeout(() => waterBtn.classList.remove('is-watering'), 420);
+
+        // Glistening water droplet spray from the button
+        const rect = waterBtn.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + rect.height / 2;
+        const dropletColors = ['#38bdf8', '#0ea5e9', '#7dd3fc', '#bae6fd', '#60a5fa'];
+
+        for (let i = 0; i < 20; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'water-drop-spray';
+            const color = dropletColors[Math.floor(Math.random() * dropletColors.length)];
+            const size = 9 + Math.random() * 9;
+            const angle = (Math.PI * 2 * i) / 20 + (Math.random() - 0.5) * 0.4;
+            const dist = 70 + Math.random() * 160;
+            const dx = Math.cos(angle) * dist;
+            const dy = Math.sin(angle) * dist;
+
+            drop.style.left = `${startX}px`;
+            drop.style.top = `${startY}px`;
+            drop.style.setProperty('--dx', `${dx}px`);
+            drop.style.setProperty('--dy', `${dy}px`);
+
+            drop.innerHTML = `<svg width="${size}" height="${size * 1.3}" viewBox="0 0 16 22" fill="none">
+                <path d="M8 2 C8 2 2 9 2 14 C2 18 4.7 20 8 20 C11.3 20 14 18 14 14 C14 9 8 2 8 2 Z" fill="${color}"/>
+                <circle cx="6" cy="13" r="1.6" fill="#ffffff" opacity="0.8"/>
+            </svg>`;
+
+            document.body.appendChild(drop);
+            setTimeout(() => drop.remove(), 880);
+        }
+
+        // Bloom reaction on each fenced plot
+        const plots = document.querySelectorAll('.fenced-plot');
+        plots.forEach(plot => {
+            plot.classList.remove('watered-bloom');
+            void plot.offsetWidth; // trigger reflow
+            plot.classList.add('watered-bloom');
+        });
+
+        // Show toast notification
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2400);
+    });
 </script>
 
 </body>
