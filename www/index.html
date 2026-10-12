@@ -3,728 +3,719 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayli's Garden 🌸 | kaylisgarden.com</title>
+    <title>Kayli's Garden</title>
     <meta name="description" content="Welcome to Kayli's Garden — a cozy, blooming corner of the web.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-canvas: #fff5f7;
-            --bg-card: rgba(255, 255, 255, 0.82);
-            --border-card: rgba(244, 114, 182, 0.25);
-            --border-card-hover: rgba(236, 72, 153, 0.5);
-            --text-heading: #831843;
-            --text-body: #701a40;
-            --text-muted: #9d4c6f;
-            --pink-primary: #ec4899;
-            --pink-soft: #f472b6;
-            --pink-light: #fce7f3;
-            --pink-bubble: #fdf2f8;
-            --sage-accent: #10b981;
-            --sage-bg: rgba(16, 185, 129, 0.1);
-            --gradient-garden: linear-gradient(135deg, #f472b6 0%, #ec4899 50%, #db2777 100%);
-            --shadow-soft: 0 10px 30px -8px rgba(236, 72, 153, 0.18);
-            --shadow-hover: 0 16px 36px -10px rgba(236, 72, 153, 0.3);
-            --radius-pill: 999px;
-            --radius-card: 24px;
-            --transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        [data-theme="night"] {
-            --bg-canvas: #1c111a;
-            --bg-card: rgba(38, 24, 36, 0.85);
-            --border-card: rgba(244, 114, 182, 0.2);
-            --border-card-hover: rgba(244, 114, 182, 0.5);
-            --text-heading: #fce7f3;
-            --text-body: #fbcfe8;
-            --text-muted: #d5a5be;
-            --pink-primary: #f472b6;
-            --pink-soft: #ec4899;
-            --pink-light: #3b2034;
-            --pink-bubble: #2d1828;
-            --shadow-soft: 0 10px 30px -8px rgba(0, 0, 0, 0.6);
-            --shadow-hover: 0 16px 36px -10px rgba(244, 114, 182, 0.25);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Quicksand', 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--text-body);
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(180deg, #fce4ef 0%, #fdeaf3 50%, #fff5f0 100%);
+            color: #4a2c2c;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             overflow-x: hidden;
-            position: relative;
-            transition: background-color 0.35s ease, color 0.35s ease;
         }
 
-        /* Ambient floating petals background */
-        .ambient-garden {
+        /* ── SKY SCENE ── */
+        .sky-scene {
             position: fixed;
-            top: 0;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(180deg, #fce4ef 0%, #fdeaf3 45%, #fff5f0 100%);
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .sun {
+            position: absolute;
+            top: 5%;
+            right: 7%;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 38% 38%, #ffe082, #ffb74d);
+            box-shadow: 0 0 0 14px rgba(255,183,76,0.14), 0 0 0 28px rgba(255,183,76,0.07);
+            animation: sun-pulse 5s ease-in-out infinite;
+        }
+
+        @keyframes sun-pulse {
+            0%,100% { box-shadow: 0 0 0 14px rgba(255,183,76,0.14), 0 0 0 28px rgba(255,183,76,0.07); }
+            50%      { box-shadow: 0 0 0 18px rgba(255,183,76,0.2),  0 0 0 36px rgba(255,183,76,0.09); }
+        }
+
+        /* Clouds */
+        .cloud {
+            position: absolute;
+            animation: drift linear infinite;
+        }
+        .cloud rect, .cloud circle { filter: blur(0); }
+        .c1 { top: 7%;  animation-duration: 38s; left: -220px; }
+        .c2 { top: 14%; animation-duration: 55s; left: -300px; animation-delay: -22s; }
+        .c3 { top: 4%;  animation-duration: 44s; left: -180px; animation-delay: -12s; opacity: .7; }
+
+        @keyframes drift { from { left: -320px; } to { left: 110%; } }
+
+        /* Ground strip */
+        .ground-strip {
+            position: fixed;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .petal-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(70px);
-            opacity: 0.35;
-        }
-
-        .petal-blob-1 {
-            width: 450px;
-            height: 450px;
-            background: #fbcfe8;
-            top: -120px;
-            right: -100px;
-        }
-
-        .petal-blob-2 {
-            width: 400px;
-            height: 400px;
-            background: #fda4af;
-            bottom: -100px;
-            left: -80px;
-        }
-
-        .petal-blob-3 {
-            width: 320px;
-            height: 320px;
-            background: #a7f3d0;
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.18;
-        }
-
-        /* Falling flowers effect */
-        .falling-item {
-            position: absolute;
-            top: -40px;
-            user-select: none;
-            pointer-events: none;
-            animation: fall linear infinite;
-            font-size: 1.4rem;
-            opacity: 0.7;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-20px) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.75;
-            }
-            90% {
-                opacity: 0.75;
-            }
-            100% {
-                transform: translateY(105vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Layout */
-        .container {
-            width: 100%;
-            max-width: 820px;
-            margin: 0 auto;
-            padding: 32px 24px 60px;
-            display: flex;
-            flex-direction: column;
-            gap: 36px;
-            position: relative;
+            height: 72px;
+            background: #6dc46b;
             z-index: 1;
+            pointer-events: none;
+        }
+        .ground-strip::before {
+            content: '';
+            position: absolute;
+            top: -18px;
+            left: 0;
+            width: 100%;
+            height: 22px;
+            background: radial-gradient(ellipse 12px 18px at center bottom, #7ed87c, transparent) repeat-x;
+            background-size: 20px 18px;
         }
 
-        /* Top Header */
+        /* Falling petals */
+        .petal-wrap {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2000;
+            overflow: hidden;
+        }
+        .petal {
+            position: absolute;
+            top: -30px;
+            animation: petal-fall linear forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes petal-fall {
+            0%   { transform: translateY(0)    rotate(0deg)   scale(.7);  opacity: 0; }
+            8%   { opacity: .85; }
+            90%  { opacity: .75; }
+            100% { transform: translateY(108vh) rotate(480deg) scale(1.1); opacity: 0; }
+        }
+
+        /* ── LAYOUT ── */
+        .page {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding-bottom: 110px;
+        }
+
+        /* ── HEADER ── */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
+            text-align: center;
+            padding: 52px 24px 36px;
         }
-
-        .logo-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
+        .site-title {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(3rem, 9vw, 5.2rem);
+            color: #7c2d5e;
+            text-shadow: 3px 4px 0 rgba(236,72,153,.12);
+            line-height: 1.15;
+            margin-bottom: 14px;
         }
-
-        .logo-icon {
-            font-size: 1.7rem;
-            animation: gentle-sway 3s ease-in-out infinite;
-            display: inline-block;
-            transform-origin: bottom center;
-        }
-
-        @keyframes gentle-sway {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(10deg); }
-        }
-
-        .logo-text {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--text-heading);
-            letter-spacing: -0.3px;
-        }
-
-        .logo-text span {
-            color: var(--pink-primary);
-        }
-
-        .theme-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            color: var(--text-heading);
-            padding: 8px 16px;
-            border-radius: var(--radius-pill);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.88rem;
+        .site-sub {
+            font-size: 1.1rem;
+            color: #a15070;
             font-weight: 600;
+            font-style: italic;
+            max-width: 460px;
+            margin: 0 auto 20px;
+            line-height: 1.65;
+        }
+        .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: var(--shadow-soft);
+            gap: 9px;
+            padding: 9px 22px;
+            background: rgba(255,255,255,.75);
+            border: 1.5px solid rgba(236,72,153,.22);
+            border-radius: 999px;
+            font-size: .88rem;
+            font-weight: 700;
+            color: #a15070;
             backdrop-filter: blur(10px);
-            transition: var(--transition);
+        }
+        .s-dot {
+            width: 9px; height: 9px; border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 8px #4ade80;
+            animation: blink 2.2s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%,100% { transform: scale(1);    opacity: 1; }
+            50%      { transform: scale(.72);  opacity: .45; }
         }
 
-        .theme-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            border-color: var(--border-card-hover);
-            box-shadow: var(--shadow-hover);
-        }
+        /* ── PLOTS GRID ── */
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+        .plots { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; margin-bottom: 32px; }
 
-        /* Hero / Greenhouse Card */
-        .hero-card {
-            background: var(--bg-card);
+        .card {
+            background: rgba(255,249,245,.9);
+            border: 2px solid rgba(236,72,153,.18);
+            border-radius: 28px;
+            padding: 26px 22px;
             backdrop-filter: blur(16px);
-            border: 1px solid var(--border-card);
-            border-radius: var(--radius-card);
-            padding: 44px 36px;
-            box-shadow: var(--shadow-soft);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            box-shadow: 0 8px 28px rgba(236,72,153,.09);
+            transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
             position: relative;
             overflow: hidden;
-            transition: var(--transition);
+        }
+        .card:hover { transform: translateY(-7px); box-shadow: 0 18px 44px rgba(236,72,153,.16); }
+        .card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #f472b6, #a855f7);
+            border-radius: 28px 28px 0 0;
         }
 
-        .hero-card:hover {
-            box-shadow: var(--shadow-hover);
+        .illus { width: 100%; height: 200px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 18px; }
+
+        .card h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.45rem;
+            color: #7c2d5e;
+            margin-bottom: 10px;
+        }
+        .card p { font-size: .97rem; color: #a15070; line-height: 1.68; font-weight: 500; }
+
+        /* ── SVG ANIMATIONS ── */
+        @keyframes sway {
+            0%,100% { transform: rotate(-6deg); }
+            50%      { transform: rotate(6deg); }
+        }
+        @keyframes sway2 {
+            0%,100% { transform: rotate(5deg); }
+            50%      { transform: rotate(-5deg); }
+        }
+        @keyframes sway3 {
+            0%,100% { transform: rotate(-4deg); }
+            50%      { transform: rotate(4deg); }
+        }
+        @keyframes bob {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-4px); }
+        }
+        @keyframes float-bug {
+            0%   { transform: translate(0,0)   rotate(0deg); }
+            25%  { transform: translate(28px,-18px) rotate(10deg); }
+            50%  { transform: translate(54px, 0px)  rotate(0deg); }
+            75%  { transform: translate(28px, 14px)  rotate(-10deg); }
+            100% { transform: translate(0,0)   rotate(0deg); }
+        }
+        @keyframes flap {
+            0%,100% { transform: scaleX(1); }
+            50%      { transform: scaleX(.25); }
+        }
+        @keyframes steam {
+            0%   { transform: translateY(0)   scaleX(1);   opacity: .65; }
+            50%  { transform: translateY(-14px) scaleX(1.2); opacity: .35; }
+            100% { transform: translateY(-30px) scaleX(.8);  opacity: 0; }
         }
 
-        .hero-badge-top {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            background: var(--sage-bg);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            color: var(--sage-accent);
-            border-radius: var(--radius-pill);
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 22px;
-        }
+        /* apply animations with transform-box so origin is relative to element */
+        .f-sway  { transform-box: fill-box; transform-origin: bottom center; animation: sway  3.2s ease-in-out infinite; }
+        .f-sway2 { transform-box: fill-box; transform-origin: bottom center; animation: sway2 4.1s ease-in-out infinite; }
+        .f-sway3 { transform-box: fill-box; transform-origin: bottom center; animation: sway3 5s   ease-in-out infinite; }
+        .f-bob   { transform-box: fill-box; transform-origin: center;        animation: bob   2.4s ease-in-out infinite; }
+        .f-bug   { transform-box: fill-box; transform-origin: center;        animation: float-bug 6s ease-in-out infinite; }
+        .f-bug2  { transform-box: fill-box; transform-origin: center;        animation: float-bug 7.5s ease-in-out infinite reverse; animation-delay: -3s; }
+        .f-wingL { transform-box: fill-box; transform-origin: right center;  animation: flap .3s ease-in-out infinite alternate; }
+        .f-wingR { transform-box: fill-box; transform-origin: left center;   animation: flap .3s ease-in-out infinite alternate; }
+        .f-steam { animation: steam 2.1s ease-out infinite; }
+        .f-steam2{ animation: steam 2.1s ease-out infinite; animation-delay: .7s; }
+        .f-steam3{ animation: steam 2.1s ease-out infinite; animation-delay: 1.4s; }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--sage-accent);
-            box-shadow: 0 0 10px var(--sage-accent);
-            animation: pulse-dot 2s infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(0.75); opacity: 0.5; }
-        }
-
-        .avatar-garden {
-            width: 104px;
-            height: 104px;
-            border-radius: 50%;
-            background: var(--gradient-garden);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.2rem;
-            margin-bottom: 20px;
-            box-shadow: 0 12px 28px rgba(236, 72, 153, 0.32);
-            animation: bounce-flower 4s ease-in-out infinite;
-        }
-
-        @keyframes bounce-flower {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .hero-card h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-heading);
-            margin-bottom: 12px;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
-        }
-
-        .hero-card h1 span {
-            background: var(--gradient-garden);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-card p.lead {
-            font-size: 1.15rem;
-            color: var(--text-body);
-            max-width: 580px;
-            margin-bottom: 28px;
-            line-height: 1.6;
-        }
-
-        /* Action Buttons */
-        .hero-actions {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: var(--radius-pill);
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-
-        .btn-blossom {
-            background: var(--gradient-garden);
-            color: #ffffff;
-            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35);
-        }
-
-        .btn-blossom:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 12px 28px rgba(236, 72, 153, 0.5);
-        }
-
-        .btn-outline {
-            background: var(--pink-bubble);
-            color: var(--text-heading);
-            border: 1px solid var(--border-card);
-        }
-
-        .btn-outline:hover {
-            transform: translateY(-3px);
-            border-color: var(--pink-primary);
-            background: var(--pink-light);
-        }
-
-        /* Interactive Plant Counter */
-        .garden-counter-box {
-            margin-top: 26px;
-            padding: 12px 24px;
-            background: var(--pink-light);
-            border: 1px dashed var(--pink-soft);
-            border-radius: var(--radius-pill);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: var(--text-heading);
-            transition: var(--transition);
-        }
-
-        /* Garden Plots Section */
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-
-        .section-header h2 {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--text-heading);
-        }
-
-        .section-header span.pill {
-            font-size: 0.78rem;
-            font-weight: 700;
-            background: var(--pink-light);
-            color: var(--pink-primary);
-            padding: 4px 12px;
-            border-radius: var(--radius-pill);
-        }
-
-        .grid-plots {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 18px;
-        }
-
-        .plot-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-card);
-            border-radius: var(--radius-card);
-            padding: 24px;
-            box-shadow: var(--shadow-soft);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .plot-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--border-card-hover);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .plot-icon {
-            font-size: 2rem;
-            margin-bottom: 2px;
-        }
-
-        .plot-card h3 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-heading);
-        }
-
-        .plot-card p {
-            font-size: 0.92rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* Connect / Floral Pills */
-        .socials-wrapper {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-card);
-            border-radius: var(--radius-card);
-            padding: 28px;
-            box-shadow: var(--shadow-soft);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .socials-wrapper h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-heading);
-        }
-
-        .social-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .social-pill {
-            background: var(--pink-bubble);
-            border: 1px solid var(--border-card);
-            color: var(--text-heading);
-            padding: 10px 20px;
-            border-radius: var(--radius-pill);
-            text-decoration: none;
-            font-size: 0.92rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
-        }
-
-        .social-pill:hover {
-            transform: translateY(-2px);
-            background: var(--pink-light);
-            border-color: var(--pink-primary);
-            color: var(--pink-primary);
-        }
-
-        /* Footer */
-        footer {
-            margin-top: 10px;
+        /* ── CONNECT ── */
+        .connect {
+            background: rgba(255,255,255,.78);
+            border: 2px solid rgba(236,72,153,.18);
+            border-radius: 28px;
+            padding: 34px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 28px rgba(236,72,153,.09);
             text-align: center;
-            padding: 24px 0 10px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border-card);
+            margin-bottom: 26px;
         }
+        .connect h2 { font-family: 'Pacifico', cursive; font-size: 1.8rem; color: #7c2d5e; margin-bottom: 8px; }
+        .connect > p { color: #a15070; font-weight: 600; font-style: italic; margin-bottom: 24px; }
 
-        footer .heart {
-            color: var(--pink-primary);
-            display: inline-block;
-            animation: pulse-heart 1.5s infinite;
+        .links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+        .lnk {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 12px 26px;
+            background: white;
+            border: 2px solid rgba(236,72,153,.2);
+            border-radius: 999px;
+            text-decoration: none;
+            color: #7c2d5e;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: .95rem;
+            transition: all .28s cubic-bezier(.34,1.56,.64,1);
+            box-shadow: 0 4px 10px rgba(236,72,153,.07);
         }
+        .lnk:hover {
+            transform: translateY(-3px) scale(1.04);
+            border-color: #ec4899;
+            box-shadow: 0 10px 22px rgba(236,72,153,.2);
+            background: #fff0f8;
+        }
+        .lnk svg { flex-shrink: 0; }
 
-        @keyframes pulse-heart {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        /* Click bloom animation */
-        .sparkle-pop {
-            position: fixed;
-            pointer-events: none;
-            user-select: none;
-            animation: pop-fade 1s forwards ease-out;
-            font-size: 1.6rem;
-            z-index: 9999;
-        }
-
-        @keyframes pop-fade {
-            0% {
-                transform: scale(0.5) translate(0, 0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.6) translate(var(--dx), var(--dy));
-                opacity: 0;
-            }
-        }
+        /* ── FOOTER ── */
+        footer { text-align: center; padding: 22px 20px 10px; color: #c07090; font-size: .9rem; font-weight: 600; }
+        footer a { color: #ec4899; text-decoration: none; }
 
         @media (max-width: 640px) {
-            .hero-card {
-                padding: 34px 20px;
-            }
-            .hero-card h1 {
-                font-size: 2rem;
-            }
-            .container {
-                padding: 20px 16px 40px;
-                gap: 28px;
-            }
+            header { padding: 38px 18px 28px; }
+            .wrap { padding: 0 14px; }
+            .card { padding: 22px 16px; }
+            .connect { padding: 24px 18px; }
         }
     </style>
 </head>
 <body>
-    <!-- Ambient garden background glows -->
-    <div class="ambient-garden" id="ambientGarden">
-        <div class="petal-blob petal-blob-1"></div>
-        <div class="petal-blob petal-blob-2"></div>
-        <div class="petal-blob petal-blob-3"></div>
-    </div>
 
-    <div class="container">
-        <!-- Top Navigation -->
-        <header>
-            <a href="#" class="logo-wrap">
-                <span class="logo-icon">🌸</span>
-                <span class="logo-text">kaylisgarden<span>.com</span></span>
-            </a>
-            <button class="theme-btn" id="themeToggleBtn" aria-label="Toggle Night Garden Mode">
-                <span id="themeEmoji">🌙</span>
-                <span id="themeName">Night Garden</span>
-            </button>
-        </header>
+<!-- Sky scene -->
+<div class="sky-scene">
+    <div class="sun"></div>
+    <!-- Cloud 1 -->
+    <svg class="cloud c1" width="180" height="70" viewBox="0 0 180 70" fill="none">
+        <rect x="20" y="34" width="140" height="34" rx="17" fill="white" opacity=".88"/>
+        <circle cx="60"  cy="36" r="28" fill="white" opacity=".88"/>
+        <circle cx="100" cy="30" r="34" fill="white" opacity=".88"/>
+        <circle cx="140" cy="36" r="24" fill="white" opacity=".88"/>
+    </svg>
+    <!-- Cloud 2 -->
+    <svg class="cloud c2" width="220" height="80" viewBox="0 0 220 80" fill="none">
+        <rect x="24" y="40" width="172" height="38" rx="19" fill="white" opacity=".82"/>
+        <circle cx="72"  cy="42" r="34" fill="white" opacity=".82"/>
+        <circle cx="120" cy="32" r="42" fill="white" opacity=".82"/>
+        <circle cx="168" cy="42" r="30" fill="white" opacity=".82"/>
+    </svg>
+    <!-- Cloud 3 -->
+    <svg class="cloud c3" width="140" height="56" viewBox="0 0 140 56" fill="none">
+        <rect x="16" y="26" width="108" height="28" rx="14" fill="white" opacity=".75"/>
+        <circle cx="48"  cy="28" r="22" fill="white" opacity=".75"/>
+        <circle cx="82"  cy="22" r="28" fill="white" opacity=".75"/>
+        <circle cx="112" cy="28" r="20" fill="white" opacity=".75"/>
+    </svg>
+</div>
 
-        <!-- Hero: The Greenhouse / Garden Center -->
-        <section class="hero-card">
-            <div class="hero-badge-top">
-                <span class="status-dot"></span>
-                <span>Planted with love • Blooming soon</span>
-            </div>
+<!-- Ground -->
+<div class="ground-strip"></div>
 
-            <div class="avatar-garden">🌸</div>
+<!-- Falling petals container -->
+<div class="petal-wrap" id="petalWrap"></div>
 
-            <h1>Welcome to <span>Kayli's Garden</span></h1>
-            
-            <p class="lead">
-                A cozy, sunny sanctuary for creative ideas, side projects, and sweet moments. 
-                I'm tending to the beds right now — come back soon to see everything in full bloom!
-            </p>
+<!-- Page -->
+<div class="page">
+    <header>
+        <h1 class="site-title">Kayli's Garden</h1>
+        <p class="site-sub">A cozy little corner of the internet, tended with love</p>
+        <div class="status-badge">
+            <span class="s-dot"></span>
+            Blooming since 2026
+        </div>
+    </header>
 
-            <div class="hero-actions">
-                <button class="btn btn-blossom" id="waterGardenBtn">
-                    <span>💧</span> Water the Garden
-                </button>
-                <a href="#plots" class="btn btn-outline">
-                    <span>🌱</span> Explore Plots
-                </a>
-            </div>
+    <div class="wrap">
+        <div class="plots">
 
-            <div class="garden-counter-box" id="counterBox">
-                <span id="flowerCountIcon">🌷</span>
-                <span id="flowerCountText">3 blossoms watered today</span>
-            </div>
-        </section>
+            <!-- ── BERRY PATCH ── -->
+            <div class="card">
+                <div class="illus">
+                    <svg width="290" height="200" viewBox="0 0 290 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- soil -->
+                        <rect x="0" y="168" width="290" height="32" rx="6" fill="#c8956c"/>
+                        <rect x="0" y="165" width="290" height="8" rx="5" fill="#d4a87a"/>
 
-        <!-- Garden Plots / Upcoming Features -->
-        <section id="plots">
-            <div class="section-header">
-                <h2>What's Growing Here</h2>
-                <span class="pill">Coming Soon</span>
-            </div>
-            <div class="grid-plots">
-                <div class="plot-card">
-                    <div class="plot-icon">🌷</div>
-                    <h3>The Flowerbed</h3>
-                    <p>Curated creative ideas, aesthetic designs, art inspirations, and personal favorites.</p>
+                        <!-- Blueberry bush left -->
+                        <g transform="translate(52,100)">
+                            <!-- stem -->
+                            <rect x="-3" y="0" width="6" height="68" rx="3" fill="#4ade80"/>
+                            <!-- bush canopy -->
+                            <ellipse cx="0" cy="-2" rx="34" ry="28" fill="#4ade80"/>
+                            <ellipse cx="-12" cy="-8" rx="24" ry="20" fill="#22c55e"/>
+                            <ellipse cx="12" cy="-10" rx="22" ry="18" fill="#4ade80"/>
+                            <!-- blueberries -->
+                            <circle cx="-14" cy="10"  r="9" fill="#818cf8"/>
+                            <circle cx="-14" cy="10"  r="9" fill="#6366f1" opacity=".45"/>
+                            <circle cx="-14" cy="10"  r="3" fill="#e0e7ff" opacity=".5"/>
+                            <path d="M-14,1 l-2,4 l2,-2 l2,2Z" fill="#4338ca" opacity=".6"/>
+                            <circle cx="8"   cy="8"   r="8" fill="#818cf8"/>
+                            <circle cx="8"   cy="8"   r="8" fill="#6366f1" opacity=".45"/>
+                            <circle cx="8"   cy="8"   r="3" fill="#e0e7ff" opacity=".5"/>
+                            <path d="M8,-1 l-2,4 l2,-2 l2,2Z" fill="#4338ca" opacity=".6"/>
+                            <circle cx="-3"  cy="18"  r="8.5" fill="#818cf8"/>
+                            <circle cx="-3"  cy="18"  r="8.5" fill="#6366f1" opacity=".45"/>
+                            <circle cx="-3"  cy="18"  r="3" fill="#e0e7ff" opacity=".5"/>
+                            <circle cx="18"  cy="16"  r="7" fill="#818cf8"/>
+                            <circle cx="18"  cy="16"  r="7" fill="#6366f1" opacity=".45"/>
+                        </g>
+
+                        <!-- Strawberry plant center -->
+                        <g class="f-sway" transform="translate(138,80)">
+                            <!-- main stem -->
+                            <line x1="0" y1="88" x2="0" y2="0" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round"/>
+                            <!-- side leaves -->
+                            <ellipse cx="-20" cy="44" rx="24" ry="10" fill="#4ade80" transform="rotate(-28,-20,44)"/>
+                            <ellipse cx="20"  cy="60" rx="24" ry="10" fill="#22c55e" transform="rotate(28,20,60)"/>
+                            <!-- top leaf cluster -->
+                            <ellipse cx="0"   cy="-6" rx="20" ry="10" fill="#22c55e"/>
+                            <ellipse cx="17"  cy="-1" rx="18" ry="9"  fill="#4ade80" transform="rotate(22,17,-1)"/>
+                            <ellipse cx="-17" cy="-1" rx="18" ry="9"  fill="#4ade80" transform="rotate(-22,-17,-1)"/>
+                            <!-- flower -->
+                            <circle cx="0" cy="-17" r="9" fill="white"/>
+                            <circle cx="0" cy="-17" r="9" fill="none" stroke="#fce7f3" stroke-width="1"/>
+                            <circle cx="0" cy="-17" r="3.5" fill="#fbbf24"/>
+                            <!-- strawberry hanging -->
+                            <g class="f-bob" transform="translate(0,70)">
+                                <path d="M0,-14 C-9,-14 -15,0 -11,14 C-7,25 7,25 11,14 C15,0 9,-14 0,-14Z" fill="#ef4444"/>
+                                <path d="M0,-14 C-9,-14 -15,0 -11,14 C-7,25 7,25 11,14 C15,0 9,-14 0,-14Z" fill="#dc2626" opacity=".35"/>
+                                <circle cx="-5" cy="2"  r="1.2" fill="white" opacity=".65"/>
+                                <circle cx="4"  cy="7"  r="1.2" fill="white" opacity=".65"/>
+                                <circle cx="-2" cy="14" r="1.2" fill="white" opacity=".65"/>
+                                <circle cx="6"  cy="-2" r="1.2" fill="white" opacity=".65"/>
+                                <!-- cap leaves -->
+                                <path d="M0,-14 C-4,-19 -9,-17 -7,-12" stroke="#16a34a" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                <path d="M0,-14 C4,-19  9,-17  7,-12" stroke="#16a34a" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                <path d="M0,-14 C0,-20  0,-20  0,-14" stroke="#16a34a" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            </g>
+                        </g>
+
+                        <!-- Strawberry plant right -->
+                        <g class="f-sway2" transform="translate(210,100)">
+                            <line x1="0" y1="68" x2="0" y2="0" stroke="#4ade80" stroke-width="3" stroke-linecap="round"/>
+                            <ellipse cx="-16" cy="36" rx="20" ry="9" fill="#4ade80" transform="rotate(-24,-16,36)"/>
+                            <ellipse cx="0"   cy="-5" rx="17" ry="8" fill="#22c55e"/>
+                            <ellipse cx="14"  cy="-1" rx="15" ry="7" fill="#4ade80" transform="rotate(22,14,-1)"/>
+                            <g class="f-bob" transform="translate(0,55)">
+                                <path d="M0,-11 C-7,-11 -12,0 -9,11 C-6,20 6,20 9,11 C12,0 7,-11 0,-11Z" fill="#ef4444"/>
+                                <circle cx="-3" cy="3"  r="1" fill="white" opacity=".65"/>
+                                <circle cx="3"  cy="8"  r="1" fill="white" opacity=".65"/>
+                                <circle cx="-1" cy="13" r="1" fill="white" opacity=".65"/>
+                                <path d="M0,-11 C-3,-15 -7,-13 -5,-9" stroke="#16a34a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                <path d="M0,-11 C3,-15  7,-13  5,-9" stroke="#16a34a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                            </g>
+                        </g>
+
+                        <!-- Raspberry right -->
+                        <g class="f-sway3" transform="translate(258,110)">
+                            <line x1="0" y1="58" x2="0" y2="0" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"/>
+                            <ellipse cx="0" cy="-5" rx="14" ry="7" fill="#22c55e"/>
+                            <ellipse cx="-12" cy="-1" rx="12" ry="6" fill="#4ade80" transform="rotate(-20,-12,-1)"/>
+                            <!-- raspberry cluster -->
+                            <g class="f-bob">
+                                <circle cx="0"  cy="34" r="7"   fill="#f43f5e"/>
+                                <circle cx="9"  cy="30" r="6.5" fill="#e11d48"/>
+                                <circle cx="-8" cy="29" r="6.5" fill="#f43f5e"/>
+                                <circle cx="3"  cy="23" r="6"   fill="#e11d48"/>
+                                <!-- drupelets shine -->
+                                <circle cx="0"  cy="34" r="2.5" fill="#fb7185" opacity=".5"/>
+                                <circle cx="9"  cy="30" r="2.5" fill="#fb7185" opacity=".5"/>
+                                <circle cx="-8" cy="29" r="2.5" fill="#fb7185" opacity=".5"/>
+                            </g>
+                        </g>
+
+                        <!-- Butterfly -->
+                        <g class="f-bug" transform="translate(162,22)">
+                            <ellipse class="f-wingL" cx="-12" cy="0" rx="16" ry="10" fill="#f9a8d4" opacity=".85"/>
+                            <ellipse class="f-wingR" cx="12"  cy="0" rx="16" ry="10" fill="#f9a8d4" opacity=".85"/>
+                            <ellipse cx="-8" cy="7"  rx="10" ry="7" fill="#f472b6" opacity=".65"/>
+                            <ellipse cx="8"  cy="7"  rx="10" ry="7" fill="#f472b6" opacity=".65"/>
+                            <ellipse cx="0"  cy="0"  rx="3"  ry="9" fill="#9d174d"/>
+                            <line x1="-1" y1="-9" x2="-7" y2="-18" stroke="#9d174d" stroke-width="1.2" stroke-linecap="round"/>
+                            <line x1="1"  y1="-9" x2="7"  y2="-18" stroke="#9d174d" stroke-width="1.2" stroke-linecap="round"/>
+                            <circle cx="-7" cy="-18" r="1.8" fill="#9d174d"/>
+                            <circle cx="7"  cy="-18" r="1.8" fill="#9d174d"/>
+                        </g>
+                    </svg>
                 </div>
-                <div class="plot-card">
-                    <div class="plot-icon">🍓</div>
-                    <h3>The Berry Patch</h3>
-                    <p>Fun code experiments, tech projects, and sister builds like Lions Lineup Lab.</p>
-                </div>
-                <div class="plot-card">
-                    <div class="plot-icon">🍵</div>
-                    <h3>The Tea Pavilion</h3>
-                    <p>Cozy thoughts, journal snippets, book recommendations, and things that bring joy.</p>
-                </div>
+                <h2>The Berry Patch</h2>
+                <p>A sweet little corner for creative projects, side builds, and all the things that spark curiosity.</p>
             </div>
-        </section>
 
-        <!-- Connect / Socials -->
-        <section class="socials-wrapper">
-            <h3>Say Hello & Follow the Bloom</h3>
-            <div class="social-pills">
-                <a href="mailto:kaylicameron@example.com" class="social-pill">
-                    <span>💌</span> Email
+            <!-- ── COFFEE CORNER ── -->
+            <div class="card">
+                <div class="illus">
+                    <svg width="270" height="200" viewBox="0 0 270 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- soil -->
+                        <rect x="0" y="168" width="270" height="32" rx="6" fill="#c8956c"/>
+                        <rect x="0" y="165" width="270" height="8"  rx="5" fill="#d4a87a"/>
+
+                        <!-- wooden table -->
+                        <rect x="28" y="114" width="214" height="14" rx="7" fill="#a0724d"/>
+                        <rect x="28" y="114" width="214" height="6"  rx="3" fill="#c4956c"/>
+                        <!-- legs -->
+                        <rect x="42"  y="128" width="12" height="38" rx="6" fill="#8b5e3c"/>
+                        <rect x="216" y="128" width="12" height="38" rx="6" fill="#8b5e3c"/>
+
+                        <!-- saucer -->
+                        <ellipse cx="135" cy="116" rx="46" ry="9" fill="#fdf6ef"/>
+                        <ellipse cx="135" cy="116" rx="46" ry="9" fill="none" stroke="#d4a87a" stroke-width="1.5"/>
+
+                        <!-- cup body -->
+                        <path d="M100,80 L110,116 L160,116 L170,80 Z" fill="#fdf6ef"/>
+                        <path d="M100,80 L110,116 L160,116 L170,80 Z" fill="none" stroke="#d4a87a" stroke-width="1.5"/>
+                        <!-- coffee surface -->
+                        <ellipse cx="135" cy="82" rx="32" ry="8" fill="#92543a"/>
+                        <!-- cream swirl -->
+                        <ellipse cx="135" cy="82" rx="22" ry="5" fill="#fdf6ef" opacity=".55"/>
+                        <!-- latte heart -->
+                        <path d="M131,80 C131,77 133,75 135,77 C137,75 139,77 139,80 C139,83.5 135,87 135,87 C135,87 131,83.5 131,80Z" fill="#a0522d" opacity=".45"/>
+
+                        <!-- handle -->
+                        <path d="M170,88 C184,88 190,95 190,103 C190,111 184,116 170,116" stroke="#d4a87a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+
+                        <!-- steam (animated with CSS class) -->
+                        <path class="f-steam"  d="M118,74 C116,64 121,57 119,47" stroke="#e0c9b8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path class="f-steam2" d="M135,70 C133,59 138,52 136,41" stroke="#e0c9b8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path class="f-steam3" d="M152,74 C150,63 155,56 153,46" stroke="#e0c9b8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+                        <!-- biscuit on saucer -->
+                        <ellipse cx="110" cy="117" rx="9" ry="4.5" fill="#d4a87a"/>
+                        <ellipse cx="110" cy="117" rx="7"   rx="7" ry="3"   fill="#c8956c"/>
+
+                        <!-- spoon -->
+                        <line x1="172" y1="118" x2="185" y2="135" stroke="#c8956c" stroke-width="2" stroke-linecap="round"/>
+                        <ellipse cx="188" cy="137" rx="6" ry="3.5" fill="#d4a87a" transform="rotate(-35,188,137)"/>
+
+                        <!-- little succulent pot left -->
+                        <g transform="translate(40,90)">
+                            <path d="M-7,26 L-11,42 L11,42 L7,26 Z" fill="#e07050"/>
+                            <rect x="-13" y="22" width="26" height="7" rx="3.5" fill="#c86040"/>
+                            <ellipse cx="0" cy="25" rx="12" ry="3.5" fill="#8b5e3c"/>
+                            <!-- leaves -->
+                            <ellipse cx="0"   cy="14" rx="11" ry="8"  fill="#4ade80"/>
+                            <ellipse cx="-8"  cy="6"  rx="8"  ry="6"  fill="#22c55e"/>
+                            <ellipse cx="8"   cy="6"  rx="8"  ry="6"  fill="#4ade80"/>
+                            <ellipse cx="0"   cy="2"  rx="6"  ry="5"  fill="#22c55e"/>
+                        </g>
+
+                        <!-- small cactus pot right -->
+                        <g transform="translate(222,96)">
+                            <path d="M-6,20 L-9,36 L9,36 L6,20 Z" fill="#e07050"/>
+                            <rect x="-11" y="16" width="22" height="6" rx="3" fill="#c86040"/>
+                            <ellipse cx="0" cy="18" rx="10" ry="3" fill="#8b5e3c"/>
+                            <!-- cactus body -->
+                            <rect x="-3.5" y="-8" width="7" height="26" rx="3.5" fill="#4ade80"/>
+                            <!-- arms -->
+                            <path d="M-3.5,4 C-3.5,4 -13,4 -13,-3 C-13,-7 -7,-7 -7,-3" fill="#4ade80"/>
+                            <path d="M3.5,2  C3.5,2  13,2  13,-5  C13,-9  7,-9  7,-5"  fill="#4ade80"/>
+                            <!-- spines -->
+                            <circle cx="-1" cy="2"  r="1.2" fill="#22c55e"/>
+                            <circle cx="1"  cy="8"  r="1.2" fill="#22c55e"/>
+                            <circle cx="-1" cy="14" r="1.2" fill="#22c55e"/>
+                        </g>
+
+                        <!-- open book on table -->
+                        <g transform="translate(84,106)">
+                            <path d="M0,0 C-18,-4 -32,-4 -32,0 L-32,10 C-32,10 -18,6 0,8Z" fill="#fdebd0"/>
+                            <path d="M0,0 C18,-4  32,-4  32,0  L32,10 C32,10  18,6  0,8Z"  fill="#fde8d0"/>
+                            <line x1="-30" y1="2"  x2="-8" y2="0" stroke="#e0c9a0" stroke-width=".8" opacity=".7"/>
+                            <line x1="-28" y1="5"  x2="-8" y2="4" stroke="#e0c9a0" stroke-width=".8" opacity=".7"/>
+                            <line x1="8"   y1="0"  x2="30" y2="2" stroke="#e0c9a0" stroke-width=".8" opacity=".7"/>
+                            <rect x="-2" y="-1" width="4" height="11" rx="2" fill="#c8956c"/>
+                        </g>
+                    </svg>
+                </div>
+                <h2>The Coffee Corner</h2>
+                <p>A warm cozy spot for thoughts, journal entries, book recommendations, and all the small things that make life sweeter.</p>
+            </div>
+
+            <!-- ── FLOWERBED ── -->
+            <div class="card">
+                <div class="illus">
+                    <svg width="290" height="200" viewBox="0 0 290 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- soil -->
+                        <rect x="0" y="168" width="290" height="32" rx="6" fill="#c8956c"/>
+                        <rect x="0" y="165" width="290" height="8"  rx="5" fill="#d4a87a"/>
+
+                        <!-- Flower 1: pink daisy, right -->
+                        <g class="f-sway" transform="translate(208,72)">
+                            <line x1="0" y1="96" x2="0" y2="18" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round"/>
+                            <ellipse cx="18" cy="64" rx="20" ry="9" fill="#4ade80" transform="rotate(28,18,64)"/>
+                            <ellipse cx="-14" cy="48" rx="18" ry="8" fill="#22c55e" transform="rotate(-22,-14,48)"/>
+                            <!-- petals -->
+                            <ellipse cx="0" cy="6" rx="13" ry="6" fill="#f9a8d4" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="6" rx="13" ry="6" fill="#f9a8d4" transform="rotate(30)"/>
+                            <ellipse cx="0" cy="6" rx="13" ry="6" fill="#f9a8d4" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="6" rx="13" ry="6" fill="#fce7f3" transform="rotate(90)"/>
+                            <ellipse cx="0" cy="6" rx="13" ry="6" fill="#fce7f3" transform="rotate(120)"/>
+                            <ellipse cx="0" cy="6" rx="13" ry="6" fill="#fce7f3" transform="rotate(150)"/>
+                            <!-- center -->
+                            <circle cx="0" cy="0" r="10" fill="#fbbf24"/>
+                            <circle cx="0" cy="0" r="7"  fill="#f59e0b"/>
+                            <circle cx="-2" cy="-2" r="2.5" fill="#fef3c7" opacity=".5"/>
+                        </g>
+
+                        <!-- Flower 2: sunflower center -->
+                        <g class="f-sway3" transform="translate(138,52)">
+                            <line x1="0" y1="116" x2="0" y2="22" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/>
+                            <ellipse cx="22"  cy="72" rx="24" ry="9"  fill="#4ade80" transform="rotate(24,22,72)"/>
+                            <ellipse cx="-20" cy="88" rx="22" ry="9"  fill="#22c55e" transform="rotate(-18,-20,88)"/>
+                            <!-- petals (8 per layer) -->
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#fbbf24" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#fbbf24" transform="rotate(22.5)"/>
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#f59e0b" transform="rotate(45)"/>
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#fbbf24" transform="rotate(67.5)"/>
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#fbbf24" transform="rotate(90)"/>
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#f59e0b" transform="rotate(112.5)"/>
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#fbbf24" transform="rotate(135)"/>
+                            <ellipse cx="0" cy="9" rx="12" ry="5.5" fill="#fbbf24" transform="rotate(157.5)"/>
+                            <!-- disc -->
+                            <circle cx="0" cy="0" r="16" fill="#92400e"/>
+                            <circle cx="0" cy="0" r="12" fill="#78350f"/>
+                            <circle cx="0"  cy="-5" r="2"   fill="#451a03"/>
+                            <circle cx="5"  cy="-2" r="2"   fill="#451a03"/>
+                            <circle cx="6"  cy="3"  r="2"   fill="#451a03"/>
+                            <circle cx="3"  cy="8"  r="2"   fill="#451a03"/>
+                            <circle cx="-3" cy="8"  r="2"   fill="#451a03"/>
+                            <circle cx="-6" cy="3"  r="2"   fill="#451a03"/>
+                            <circle cx="-5" cy="-3" r="2"   fill="#451a03"/>
+                            <circle cx="0"  cy="0"  r="2"   fill="#5c2a0a"/>
+                        </g>
+
+                        <!-- Flower 3: purple tulip left -->
+                        <g class="f-sway2" transform="translate(62,84)">
+                            <line x1="0" y1="84" x2="0" y2="14" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round"/>
+                            <ellipse cx="-18" cy="56" rx="22" ry="9" fill="#22c55e" transform="rotate(-28,-18,56)"/>
+                            <ellipse cx="16"  cy="40" rx="20" ry="9" fill="#4ade80" transform="rotate(22,16,40)"/>
+                            <!-- tulip petals -->
+                            <path d="M0,14 C-16,14 -20,-2 -11,-12 C-5,-20 5,-20 11,-12 C20,-2 16,14 0,14Z" fill="#c084fc"/>
+                            <path d="M0,14 C-9,14 -11,4 -7,-4 C-3,-10 3,-10 7,-4 C11,4 9,14 0,14Z" fill="#ddd6fe"/>
+                            <path d="M0,14 L0,-14" stroke="#a855f7" stroke-width="1.2" fill="none" opacity=".4"/>
+                            <path d="M-9,8  C-9,8 -4,0 0,-10" stroke="#a855f7" stroke-width="1" fill="none" opacity=".3"/>
+                            <path d="M9,8   C9,8  4,0  0,-10" stroke="#a855f7" stroke-width="1" fill="none" opacity=".3"/>
+                        </g>
+
+                        <!-- Flower 4: small daisy far left -->
+                        <g class="f-sway" transform="translate(24,108)" style="animation-delay:-.8s">
+                            <line x1="0" y1="60" x2="0" y2="10" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"/>
+                            <ellipse cx="12" cy="44" rx="16" ry="7" fill="#4ade80" transform="rotate(26,12,44)"/>
+                            <ellipse cx="0" cy="5" rx="9" ry="5" fill="#f9a8d4" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="5" rx="9" ry="5" fill="#f9a8d4" transform="rotate(45)"/>
+                            <ellipse cx="0" cy="5" rx="9" ry="5" fill="#fce7f3" transform="rotate(90)"/>
+                            <ellipse cx="0" cy="5" rx="9" ry="5" fill="#fce7f3" transform="rotate(135)"/>
+                            <circle cx="0" cy="0" r="7"  fill="#fbbf24"/>
+                            <circle cx="0" cy="0" r="4.5" fill="#f59e0b"/>
+                        </g>
+
+                        <!-- Flower 5: purple pom far right -->
+                        <g class="f-sway3" transform="translate(262,116)" style="animation-delay:-1.6s">
+                            <line x1="0" y1="52" x2="0" y2="10" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"/>
+                            <ellipse cx="0" cy="7" rx="7"  ry="4" fill="#c084fc" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="7" rx="7"  ry="4" fill="#c084fc" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="7" rx="7"  ry="4" fill="#ddd6fe" transform="rotate(120)"/>
+                            <ellipse cx="0" cy="7" rx="7"  ry="4" fill="#ddd6fe" transform="rotate(180)"/>
+                            <circle cx="0" cy="0" r="6" fill="#a855f7"/>
+                            <circle cx="0" cy="0" r="3.5" fill="#9333ea"/>
+                        </g>
+
+                        <!-- Bee -->
+                        <g class="f-bug2" transform="translate(90,32)">
+                            <ellipse cx="-8" cy="-4" rx="12" ry="7" fill="#bfdbfe" opacity=".75"/>
+                            <ellipse cx="8"  cy="-4" rx="12" ry="7" fill="#bfdbfe" opacity=".75"/>
+                            <ellipse cx="0"  cy="0"  rx="6"  ry="9"  fill="#fbbf24"/>
+                            <rect x="-6" y="-2" width="12" height="3.5" rx="1.5" fill="#1c1917" opacity=".65"/>
+                            <rect x="-6" y="3"  width="12" height="3.5" rx="1.5" fill="#1c1917" opacity=".65"/>
+                            <circle cx="0" cy="-11" r="5" fill="#fbbf24"/>
+                            <circle cx="-2" cy="-12" r="1.5" fill="#1c1917"/>
+                            <circle cx="2"  cy="-12" r="1.5" fill="#1c1917"/>
+                            <line x1="-1" y1="-16" x2="-5" y2="-22" stroke="#1c1917" stroke-width="1.2" stroke-linecap="round"/>
+                            <line x1="1"  y1="-16" x2="5"  y2="-22" stroke="#1c1917" stroke-width="1.2" stroke-linecap="round"/>
+                            <circle cx="-5" cy="-22" r="1.4" fill="#1c1917"/>
+                            <circle cx="5"  cy="-22" r="1.4" fill="#1c1917"/>
+                        </g>
+                    </svg>
+                </div>
+                <h2>The Flowerbed</h2>
+                <p>A gallery of creative designs, aesthetic inspirations, and beautiful things worth sharing with the world.</p>
+            </div>
+        </div>
+
+        <!-- Connect -->
+        <div class="connect">
+            <h2>Come Say Hello</h2>
+            <p>The garden gate is always open</p>
+            <div class="links">
+                <!-- Email -->
+                <a href="mailto:kaylimc58@gmail.com" class="lnk">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect width="28" height="28" rx="14" fill="#fce7f3"/>
+                        <rect x="6" y="9" width="16" height="12" rx="2.5" fill="none" stroke="#ec4899" stroke-width="1.5"/>
+                        <path d="M6,11 L14,17 L22,11" stroke="#ec4899" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Email
                 </a>
-                <a href="https://github.com/kaylicameron" target="_blank" rel="noopener noreferrer" class="social-pill">
-                    <span>🪴</span> GitHub
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/kayli-cameron-1a43013a8/" target="_blank" rel="noopener noreferrer" class="lnk">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect width="28" height="28" rx="14" fill="#fce7f3"/>
+                        <rect x="7" y="11" width="4.5" height="11" rx="1.5" fill="#ec4899"/>
+                        <circle cx="9.25" cy="8.25" r="2.25" fill="#ec4899"/>
+                        <path d="M14,11 L14,22" stroke="#ec4899" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M14,15.5 C14,12.5 22,12 22,16.5 L22,22" stroke="#ec4899" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    LinkedIn
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-pill">
-                    <span>💼</span> LinkedIn
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-pill">
-                    <span>📸</span> Instagram
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/kayli.cameron" target="_blank" rel="noopener noreferrer" class="lnk">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect width="28" height="28" rx="14" fill="#fce7f3"/>
+                        <rect x="7" y="7" width="14" height="14" rx="4.5" fill="none" stroke="#ec4899" stroke-width="1.5"/>
+                        <circle cx="14" cy="14" r="4" fill="none" stroke="#ec4899" stroke-width="1.5"/>
+                        <circle cx="19.5" cy="8.5" r="1.3" fill="#ec4899"/>
+                    </svg>
+                    Instagram
                 </a>
             </div>
-        </section>
+        </div>
 
-        <!-- Footer -->
         <footer>
-            <p>
-                &copy; <span id="year"></span> <strong>kaylisgarden.com</strong> • Tended with <span class="heart">💖</span> by Kayli Cameron
-            </p>
+            <p>&copy; <span id="yr"></span> <a href="https://kaylisgarden.com">kaylisgarden.com</a> &mdash; tended with love</p>
         </footer>
     </div>
+</div>
 
-    <script>
-        // Set dynamic copyright year
-        document.getElementById('year').textContent = new Date().getFullYear();
+<script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
 
-        // Theme Toggle: Day Blossom vs. Night Garden
-        const themeBtn = document.getElementById('themeToggleBtn');
-        const themeEmoji = document.getElementById('themeEmoji');
-        const themeName = document.getElementById('themeName');
-        const root = document.documentElement;
+    // Falling petals
+    const wrap = document.getElementById('petalWrap');
+    const colors = ['#fce7f3','#f9a8d4','#fbcfe8','#ddd6fe','#ffe4e6','#fecdd3'];
 
-        const currentTheme = localStorage.getItem('garden-theme') || 'day';
-        setTheme(currentTheme);
+    function mkPetal() {
+        const el = document.createElement('div');
+        el.className = 'petal';
+        const c = colors[Math.floor(Math.random() * colors.length)];
+        const w = 10 + Math.random() * 8;
+        const h = w * (1.4 + Math.random() * .4);
+        const dur = 9 + Math.random() * 9;
+        el.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+            <ellipse cx="${w/2}" cy="${h/2}" rx="${w/2}" ry="${h/2}" fill="${c}" opacity=".85"/>
+        </svg>`;
+        el.style.left  = Math.random() * 100 + 'vw';
+        el.style.transform = `rotate(${Math.random()*360}deg)`;
+        el.style.animationDuration = dur + 's';
+        wrap.appendChild(el);
+        setTimeout(() => el.remove(), dur * 1000 + 200);
+    }
 
-        themeBtn.addEventListener('click', () => {
-            const active = root.getAttribute('data-theme') === 'night' ? 'night' : 'day';
-            setTheme(active === 'night' ? 'day' : 'night');
-        });
-
-        function setTheme(theme) {
-            if (theme === 'night') {
-                root.setAttribute('data-theme', 'night');
-                themeEmoji.textContent = '☀️';
-                themeName.textContent = 'Day Blossom';
-                localStorage.setItem('garden-theme', 'night');
-            } else {
-                root.removeAttribute('data-theme');
-                themeEmoji.textContent = '🌙';
-                themeName.textContent = 'Night Garden';
-                localStorage.setItem('garden-theme', 'day');
-            }
-        }
-
-        // Falling Petals Generator
-        const ambientGarden = document.getElementById('ambientGarden');
-        const floralSymbols = ['🌸', '🌺', '🌷', '🍃', '✨', '🍓', '🦋'];
-
-        function createFallingPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'falling-item';
-            petal.textContent = floralSymbols[Math.floor(Math.random() * floralSymbols.length)];
-            petal.style.left = Math.random() * 95 + 'vw';
-            petal.style.animationDuration = (8 + Math.random() * 7) + 's';
-            petal.style.fontSize = (1 + Math.random() * 0.8) + 'rem';
-            ambientGarden.appendChild(petal);
-
-            setTimeout(() => {
-                petal.remove();
-            }, 15000);
-        }
-
-        // Spawn gentle ambient petals periodically
-        setInterval(createFallingPetal, 2600);
-        for (let i = 0; i < 4; i++) setTimeout(createFallingPetal, i * 600);
-
-        // Interactive "Water the Garden" Blossom Effect
-        let flowerCount = parseInt(localStorage.getItem('watered-count') || '3', 10);
-        const countText = document.getElementById('flowerCountText');
-        const waterBtn = document.getElementById('waterGardenBtn');
-
-        function updateCounterDisplay() {
-            countText.textContent = `${flowerCount} blossoms watered today!`;
-        }
-        updateCounterDisplay();
-
-        waterBtn.addEventListener('click', (e) => {
-            flowerCount++;
-            localStorage.setItem('watered-count', flowerCount);
-            updateCounterDisplay();
-
-            // Burst sparkles/flowers at button position
-            const rect = waterBtn.getBoundingClientRect();
-            const bursts = ['🌸', '💖', '💧', '🌷', '✨', '🌱'];
-
-            for (let i = 0; i < 6; i++) {
-                const burst = document.createElement('div');
-                burst.className = 'sparkle-pop';
-                burst.textContent = bursts[i % bursts.length];
-                burst.style.left = (rect.left + rect.width / 2) + 'px';
-                burst.style.top = (rect.top + rect.height / 2) + 'px';
-                burst.style.setProperty('--dx', ((Math.random() - 0.5) * 160) + 'px');
-                burst.style.setProperty('--dy', ((Math.random() - 0.9) * 140) + 'px');
-                document.body.appendChild(burst);
-
-                setTimeout(() => burst.remove(), 1000);
-            }
-        });
-    </script>
+    // seed initial petals
+    for (let i = 0; i < 4; i++) setTimeout(mkPetal, i * 1200);
+    setInterval(mkPetal, 3200);
+</script>
 </body>
 </html>
