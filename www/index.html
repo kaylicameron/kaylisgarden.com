@@ -746,7 +746,7 @@
                     <path d="M9 2 C9 2 4 8.5 4 12 C4 15 6.2 16.5 9 16.5 C11.8 16.5 14 15 14 12 C14 8.5 9 2 9 2 Z" fill="#f43f5e"/>
                     <circle cx="7.5" cy="11.5" r="1.5" fill="#ffffff" opacity="0.8"/>
                 </svg>
-                <span id="waterCountText">Watered 0 times today</span>
+                <span id="waterCountText">Watered 15 times in total</span>
             </div>
         </div>
     </header>
@@ -1401,47 +1401,61 @@
 <script>
     document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-    // Interactive "Water the Plants" Experience with Daily Midnight Reset
-    function getTodayKey() {
-        const d = new Date();
-        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
+    // Global Real-Time "Water the Plants" Counter across all visitors
+    const GLOBAL_COUNT_URL = 'https://countapi.mileshilliard.com/api/v1';
+    const GLOBAL_KEY = 'kaylisgarden_watered_global';
 
-    const todayKey = getTodayKey();
-    const storedDate = localStorage.getItem('watered-date');
-    let waterCount;
-
-    if (storedDate !== todayKey) {
-        // Automatically reset for the new day
-        waterCount = 0;
-        localStorage.setItem('watered-date', todayKey);
-        localStorage.setItem('watered-count', '0');
-    } else {
-        waterCount = parseInt(localStorage.getItem('watered-count') || '0', 10);
+    let waterCount = parseInt(localStorage.getItem('watered-count-global') || '15', 10);
+    if (isNaN(waterCount) || waterCount < 15) {
+        waterCount = 15;
     }
 
     const waterBtn = document.getElementById('waterPlantsBtn');
     const waterCountText = document.getElementById('waterCountText');
     const toast = document.createElement('div');
     toast.className = 'water-toast';
-    toast.innerHTML = `<svg width="20" height="20" viewBox="0 0 18 18" fill="none" style="vertical-align:middle;margin-right:8px;display:inline-block"><path d="M9 2 C9 2 4 8.5 4 12 C4 15 6.2 16.5 9 16.5 C11.8 16.5 14 15 14 12 C14 8.5 9 2 9 2 Z" fill="#f43f5e"/><circle cx="7.5" cy="11.5" r="1.5" fill="#ffffff" opacity="0.8"/></svg> All berries, roses & coffee corner are refreshed!`;
     document.body.appendChild(toast);
 
     function updateWaterDisplay() {
-        waterCountText.textContent = `Watered ${waterCount} ${waterCount === 1 ? 'time' : 'times'} today`;
+        const formatted = waterCount.toLocaleString();
+        waterCountText.textContent = `Watered ${formatted} ${waterCount === 1 ? 'time' : 'times'} in total`;
     }
     updateWaterDisplay();
 
+    // Fetch initial global count on load
+    fetch(`${GLOBAL_COUNT_URL}/get/${GLOBAL_KEY}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data && typeof data.value === 'number') {
+                waterCount = Math.max(waterCount, data.value);
+                localStorage.setItem('watered-count-global', waterCount);
+                updateWaterDisplay();
+            }
+        })
+        .catch(err => {
+            console.warn('Could not load global water count:', err);
+        });
+
     let toastTimer;
     waterBtn.addEventListener('click', () => {
-        const currentKey = getTodayKey();
-        if (localStorage.getItem('watered-date') !== currentKey) {
-            waterCount = 0;
-            localStorage.setItem('watered-date', currentKey);
-        }
+        // Optimistic UI increment
         waterCount++;
-        localStorage.setItem('watered-count', waterCount);
+        localStorage.setItem('watered-count-global', waterCount);
         updateWaterDisplay();
+
+        // Background server sync
+        fetch(`${GLOBAL_COUNT_URL}/hit/${GLOBAL_KEY}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && typeof data.value === 'number') {
+                    waterCount = Math.max(waterCount, data.value);
+                    localStorage.setItem('watered-count-global', waterCount);
+                    updateWaterDisplay();
+                }
+            })
+            .catch(err => {
+                console.warn('Could not record water hit:', err);
+            });
 
         // Watering can tilt animation
         waterBtn.classList.add('is-watering');
@@ -1485,12 +1499,13 @@
             plot.classList.add('watered-bloom');
         });
 
-        // Show toast
+        // Show toast with updated global count
+        toast.innerHTML = `<svg width="20" height="20" viewBox="0 0 18 18" fill="none" style="vertical-align:middle;margin-right:8px;display:inline-block"><path d="M9 2 C9 2 4 8.5 4 12 C4 15 6.2 16.5 9 16.5 C11.8 16.5 14 15 14 12 C14 8.5 9 2 9 2 Z" fill="#f43f5e"/><circle cx="7.5" cy="11.5" r="1.5" fill="#ffffff" opacity="0.8"/></svg> All berries, roses & coffee corner are refreshed! Total waters: ${waterCount.toLocaleString()}`;
         toast.classList.add('show');
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => {
             toast.classList.remove('show');
-        }, 2500);
+        }, 2600);
     });
 </script>
 
