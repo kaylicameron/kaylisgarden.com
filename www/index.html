@@ -69,37 +69,43 @@
             background-position: 0 0, 18px 18px, 9px 9px;
         }
 
-        /* ── TOP-DOWN BUTTERFLY OVERHEAD ── */
+        /* ── TOP-DOWN GARDEN CAT ROAMING THE LAWN ── */
         .garden-creature {
             position: absolute;
             pointer-events: none;
             z-index: 2500;
         }
-        .butterfly-patrol {
-            top: 140px;
-            left: 10%;
-            animation: butterfly-flight 24s ease-in-out infinite;
-            filter: drop-shadow(0 22px 14px rgba(20, 35, 10, 0.35));
+        .cat-patrol {
+            top: 120px;
+            left: 6%;
+            animation: cat-roam 32s ease-in-out infinite;
+            filter: drop-shadow(0 12px 10px rgba(18, 32, 10, 0.38));
         }
-        @keyframes butterfly-flight {
-            0%   { transform: translate(0, 0) rotate(20deg); }
-            22%  { transform: translate(320px, 90px) rotate(55deg); }
-            48%  { transform: translate(680px, -20px) rotate(-10deg); }
-            70%  { transform: translate(450px, 240px) rotate(120deg); }
-            86%  { transform: translate(140px, 180px) rotate(220deg); }
-            100% { transform: translate(0, 0) rotate(20deg); }
+        @keyframes cat-roam {
+            0%   { transform: translate(0, 0) rotate(70deg); }
+            18%  { transform: translate(min(260px, 35vw), 45px) rotate(85deg); }
+            35%  { transform: translate(min(520px, 68vw), 75px) rotate(105deg); }
+            50%  { transform: translate(min(620px, 78vw), 195px) rotate(180deg); }
+            68%  { transform: translate(min(420px, 52vw), 280px) rotate(260deg); }
+            82%  { transform: translate(min(180px, 22vw), 230px) rotate(290deg); }
+            92%  { transform: translate(30px, 120px) rotate(350deg); }
+            100% { transform: translate(0, 0) rotate(70deg); }
         }
-        .wing-left {
-            transform-origin: right center;
-            animation: flap-wings 0.22s ease-in-out infinite alternate;
+        .cat-tail {
+            transform-origin: 22px 38px;
+            animation: cat-tail-swish 1.7s ease-in-out infinite alternate;
         }
-        .wing-right {
-            transform-origin: left center;
-            animation: flap-wings 0.22s ease-in-out infinite alternate;
+        @keyframes cat-tail-swish {
+            0%   { transform: rotate(-20deg); }
+            50%  { transform: rotate(0deg); }
+            100% { transform: rotate(24deg); }
         }
-        @keyframes flap-wings {
-            0%   { transform: scaleX(1); }
-            100% { transform: scaleX(0.24); }
+        .cat-paws {
+            animation: cat-patter 0.48s ease-in-out infinite alternate;
+        }
+        @keyframes cat-patter {
+            0%   { transform: translateY(-1.2px); }
+            100% { transform: translateY(1.2px); }
         }
 
         /* ── PAGE LAYOUT ── */
@@ -739,36 +745,65 @@
     <div class="grass-texture"></div>
 </div>
 
-<!-- Top-Down Swallowtail Butterfly Overhead -->
-<div class="garden-creature butterfly-patrol">
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <!-- Soft Ground Shadow -->
-        <g opacity="0.32" transform="translate(4, 7)">
-            <ellipse cx="15" cy="20" rx="11" ry="7" fill="#14260a"/>
-            <ellipse cx="31" cy="20" rx="11" ry="7" fill="#14260a"/>
+<!-- Top-Down Garden Calico Cat Roaming the Grounds -->
+<div class="garden-creature cat-patrol" aria-label="Garden Cat">
+    <svg width="46" height="64" viewBox="0 0 44 62" fill="none">
+        <!-- Soft Ground Contact Shadow -->
+        <ellipse cx="22" cy="28" rx="14" ry="20" fill="#14260a" opacity="0.32"/>
+
+        <!-- Little White Paws taking gentle steps -->
+        <g class="cat-paws">
+            <!-- Front left & right paws -->
+            <ellipse cx="10" cy="18" rx="3.5" ry="5.5" fill="#fffdfa" stroke="#e5e7eb" stroke-width="0.8"/>
+            <ellipse cx="34" cy="18" rx="3.5" ry="5.5" fill="#fffdfa" stroke="#e5e7eb" stroke-width="0.8"/>
+            <!-- Back left & right paws -->
+            <ellipse cx="9" cy="38" rx="4" ry="6" fill="#fffdfa" stroke="#e5e7eb" stroke-width="0.8"/>
+            <ellipse cx="35" cy="38" rx="4" ry="6" fill="#fffdfa" stroke="#e5e7eb" stroke-width="0.8"/>
         </g>
-        <!-- Wing Left (Rose Pink with Gold Trim) -->
-        <g class="wing-left">
-            <path d="M23 23 C15 10 2 12 4 23 C6 32 19 28 23 23 Z" fill="#f43f5e"/>
-            <path d="M23 23 C17 14 7 15 8 22 C10 27 20 25 23 23 Z" fill="#fda4af"/>
-            <circle cx="12" cy="21" r="2.2" fill="#ffffff" opacity="0.85"/>
-            <!-- Swallowtail tail -->
-            <path d="M6 29 C4 35 2 38 1 40 C3 38 6 34 8 30 Z" fill="#e11d48"/>
+
+        <!-- Swishing Tail (extends behind torso) -->
+        <g class="cat-tail">
+            <path d="M22 42 C20 48 26 52 23 57 C21 61 24 63 26 61" stroke="#e08244" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+            <!-- White tail tip -->
+            <circle cx="26" cy="61" r="2.8" fill="#fffdfa"/>
         </g>
-        <!-- Wing Right (Rose Pink with Gold Trim) -->
-        <g class="wing-right">
-            <path d="M25 23 C33 10 46 12 44 23 C42 32 29 28 25 23 Z" fill="#f43f5e"/>
-            <path d="M25 23 C31 14 41 15 40 22 C38 27 28 25 25 23 Z" fill="#fda4af"/>
-            <circle cx="36" cy="21" r="2.2" fill="#ffffff" opacity="0.85"/>
-            <!-- Swallowtail tail -->
-            <path d="M42 29 C44 35 46 38 47 40 C45 38 42 34 40 30 Z" fill="#e11d48"/>
+
+        <!-- Torso Body (Calico: Cream base with warm ginger & dark espresso patches) -->
+        <ellipse cx="22" cy="27" rx="13" ry="17" fill="#fffdfa"/>
+        <!-- Ginger patch on left flank -->
+        <path d="M11 18 C14 16 19 21 17 29 C14 34 9 32 10 24 Z" fill="#e08244"/>
+        <!-- Dark espresso patch on right flank -->
+        <path d="M33 22 C30 19 26 23 27 31 C28 36 34 35 34 27 Z" fill="#292524"/>
+        <!-- Subtle spine fur highlight -->
+        <path d="M22 14 L22 39" stroke="#f3f4f6" stroke-width="1.2" opacity="0.6"/>
+
+        <!-- Rounded Cat Head in front -->
+        <circle cx="22" cy="12" r="10.5" fill="#fffdfa"/>
+        <!-- Ginger patch on right side of head -->
+        <path d="M22 3 C27 4 32 8 31 15 C29 17 25 14 23 11 Z" fill="#e08244"/>
+
+        <!-- Left Cat Ear with Pastel Pink Inner Ear -->
+        <polygon points="14,10 9,2 18,5" fill="#fffdfa" stroke="#e5e7eb" stroke-width="0.8"/>
+        <polygon points="14,9 10,4 17,6" fill="#fbcfe8"/>
+
+        <!-- Right Cat Ear with Pastel Pink Inner Ear -->
+        <polygon points="30,10 35,2 26,5" fill="#e08244" stroke="#c2632b" stroke-width="0.8"/>
+        <polygon points="30,9 34,4 27,6" fill="#fbcfe8"/>
+
+        <!-- Tiny Pastel Pink Nose -->
+        <polygon points="22,3 20.8,4.5 23.2,4.5" fill="#f472b6"/>
+
+        <!-- Fine Whisker Lines -->
+        <g stroke="#ffffff" stroke-width="0.9" opacity="0.9">
+            <line x1="17" y1="5" x2="6" y2="2"/>
+            <line x1="17" y1="7" x2="5" y2="7"/>
+            <line x1="27" y1="5" x2="38" y2="2"/>
+            <line x1="27" y1="7" x2="39" y2="7"/>
         </g>
-        <!-- Body & Antennae -->
-        <ellipse cx="24" cy="23" rx="2.5" ry="9" fill="#381b0a"/>
-        <line x1="23" y1="14" x2="18" y2="7" stroke="#381b0a" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="25" y1="14" x2="30" y2="7" stroke="#381b0a" stroke-width="1.3" stroke-linecap="round"/>
-        <circle cx="18" cy="7" r="1.2" fill="#f43f5e"/>
-        <circle cx="30" cy="7" r="1.2" fill="#f43f5e"/>
+
+        <!-- Pastel Pink Garden Collar with Little Golden Bell -->
+        <path d="M13 15 Q22 18 31 15" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="22" cy="17" r="2.4" fill="#fbbf24" stroke="#d97706" stroke-width="0.8"/>
     </svg>
 </div>
 
