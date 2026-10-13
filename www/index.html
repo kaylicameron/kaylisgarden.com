@@ -679,7 +679,7 @@
                     <path d="M9 2 C9 2 4 8.5 4 12 C4 15 6.2 16.5 9 16.5 C11.8 16.5 14 15 14 12 C14 8.5 9 2 9 2 Z" fill="#f43f5e"/>
                     <circle cx="7.5" cy="11.5" r="1.5" fill="#ffffff" opacity="0.8"/>
                 </svg>
-                <span id="waterCountText">Watered 3 times today</span>
+                <span id="waterCountText">Watered 0 times today</span>
             </div>
         </div>
     </header>
@@ -1364,8 +1364,25 @@
     }
     setInterval(createDriftingPetal, 2800);
 
-    // Interactive "Water the Plants" Experience
-    let waterCount = parseInt(localStorage.getItem('watered-count') || '3', 10);
+    // Interactive "Water the Plants" Experience with Daily Midnight Reset
+    function getTodayKey() {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    const todayKey = getTodayKey();
+    const storedDate = localStorage.getItem('watered-date');
+    let waterCount;
+
+    if (storedDate !== todayKey) {
+        // Automatically reset for the new day
+        waterCount = 0;
+        localStorage.setItem('watered-date', todayKey);
+        localStorage.setItem('watered-count', '0');
+    } else {
+        waterCount = parseInt(localStorage.getItem('watered-count') || '0', 10);
+    }
+
     const waterBtn = document.getElementById('waterPlantsBtn');
     const waterCountText = document.getElementById('waterCountText');
     const toast = document.createElement('div');
@@ -1380,6 +1397,11 @@
 
     let toastTimer;
     waterBtn.addEventListener('click', () => {
+        const currentKey = getTodayKey();
+        if (localStorage.getItem('watered-date') !== currentKey) {
+            waterCount = 0;
+            localStorage.setItem('watered-date', currentKey);
+        }
         waterCount++;
         localStorage.setItem('watered-count', waterCount);
         updateWaterDisplay();
